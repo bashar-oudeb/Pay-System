@@ -44,7 +44,7 @@ const Testimonials = () => {
         <h4 className=" font-Roboto font-light text-base text-primary text-center">
           WHAT THEY SAY ABOUT MONOPAY
         </h4>
-        <h1 className=" mt-2 font-Roboto font-light text-white text-3xl text-center">
+        <h1 className=" mt-2  font-Roboto font-light text-white text-3xl text-center">
           <span className="text-primary ">98%</span> Customer Satisfaction
         </h1>
         <p className="px-6 mt-4 font-Roboto font-light text-sm text-white leading-5 text-center">

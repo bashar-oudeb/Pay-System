@@ -11,7 +11,13 @@ export default {
         secondary: '#D6D3C2',
         bg: '#000000',
         white: '#E5E5E5',
+        borders: '#999999',
       },
+      gridTemplateColumns: {
+        // Simple 16 column grid
+        'gridColumns': 'repeat(auto-fill, minmax(400px, 1fr))',
+
+      }
     },
     fontFamily: {
       Roboto: ["Roboto Slab", 'serif']
