@@ -1,9 +1,43 @@
 import img from "../../assets/testimonials/avatar.png";
 import img1 from "../../assets/testimonials/people02.png";
 import img2 from "../../assets/testimonials/img.png";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import gsap from 'gsap';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register the ScrollTrigger plugin with GSAP
+gsap.registerPlugin(ScrollTrigger);
 
 const Testimonials = () => {
+  const container = useRef<HTMLDivElement>(null); // Create a ref for the container element
+
+
+  // UseEffect to run animations when the component mounts
+  useEffect(() => {
+    // Create a GSAP context to scope animations to this component
+    const ctx = gsap.context(() => {
+      // Define GSAP animations with ScrollTrigger
+     
+      gsap.fromTo('.right', 
+        { x: 300,opacity: 0 }, 
+        { x: 0,opacity: 1, duration: 2, delay:.5, scrollTrigger: { trigger: '.right', start: 'top 80%' } }
+      );
+      gsap.fromTo('.left', 
+        { x: -400,opacity: 0  }, 
+        { x: 0, opacity: 1, duration: 2,delay:.5, scrollTrigger: { trigger: '.left', start: 'top 80%' } }
+      );
+      gsap.fromTo('.bottom', 
+        { y: 200,opacity: 0  }, 
+        { y: 0, opacity: 1, duration: 2,delay:.5, scrollTrigger: { trigger: '.bottom', start: 'top 80%' } }
+      );
+    
+      
+    }, container);
+
+    // Cleanup the GSAP context on component unmount
+    return () => ctx.revert();
+  }, []);
+
   const slides = [
     {
       img: img,
@@ -14,13 +48,15 @@ const Testimonials = () => {
     },
     {
       img: img1,
-      description:'Lorem ipsum dolor ,Curabitur ac ultrices odio. Nulla at congue diam, at dignissim turpis. Ut vehicula sed velit a faucibus. In feugiat vestibulum velit vel pulvinar.',
+      description:
+        "Lorem ipsum dolor ,Curabitur ac ultrices odio. Nulla at congue diam, at dignissim turpis. Ut vehicula sed velit a faucibus. In feugiat vestibulum velit vel pulvinar.",
       user: "Mike Johns",
       job: "Sydney, Australia",
     },
     {
       img: img2,
-      description:'Lorem ipsum dolor sit amet Nulla at congue diam, at dignissim turpis. Ut vehicula sed velit a faucibus. In feugiat vestibulum velit vel pulvinar.',
+      description:
+        "Lorem ipsum dolor sit amet Nulla at congue diam, at dignissim turpis. Ut vehicula sed velit a faucibus. In feugiat vestibulum velit vel pulvinar.",
       user: "JEmily G",
       job: "Sydney, Japan",
     },
@@ -39,23 +75,23 @@ const Testimonials = () => {
     );
 
   return (
-    <section className=" pt-20 ">
+    <section ref={container} className=" pt-20 md:pt-24 xl:pt-40  overflow-hidden">
       <div className="">
-        <h4 className=" font-Roboto font-light text-base text-primary text-center">
+        <h4 className="bottom font-Roboto font-light text-base text-primary text-center">
           WHAT THEY SAY ABOUT MONOPAY
         </h4>
-        <h1 className=" mt-2  font-Roboto font-light text-white text-3xl text-center">
+        <h1 className="right mt-2 xl:mt-4  font-Roboto font-light text-white text-3xl lg:text-4xl text-center">
           <span className="text-primary ">98%</span> Customer Satisfaction
         </h1>
-        <p className="px-6 mt-4 font-Roboto font-light text-sm text-white leading-5 text-center">
+        <p className="left px-6 xl:px-20 md:w-2/4 md:mx-auto mt-4 font-Roboto font-light text-sm text-white leading-5 text-center">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac
           ultrices odio. Nulla at congu
         </p>
       </div>
 
-      <div className="pt-16 px-5">
+      <div className="pt-16 px-5 xl:hidden">
         <div className=" flex items-center justify-center gap-5">
-          <div className=" w-16 h-16 ">
+          <div className="left w-16 h-16 ">
             <img
               src={slides[slideIndex].img}
               alt=""
@@ -63,20 +99,23 @@ const Testimonials = () => {
             />
           </div>
           <div className="">
-            <h1 className=" font-Roboto font-semibold text-base text-white">
+            <h1 className="right font-Roboto font-semibold text-base text-white">
               {slides[slideIndex].user}
             </h1>
-            <span className=" font-Roboto  text-sm text-gray-400 ">
+            <span className="right font-Roboto  text-sm text-gray-400 ">
               {slides[slideIndex].job}
             </span>
           </div>
         </div>
-        <p className="px-2 mt-5 font-Roboto text-sm font-light text-white leading-5 text-center">
+        <p className="bottom px-2 md:px-28 lg:px-0 lg:w-2/5 lg:mx-auto  mt-5 font-Roboto text-sm font-light text-white leading-5 text-center">
           {slides[slideIndex].description}
         </p>
 
-        <div className="pt-5  flex justify-center items-center gap-5">
-          <button className=" py-2 px-3 rounded-full " onClick={prevSlide}>
+        <div className="left pt-5  flex justify-center items-center gap-5 lg:relative">
+          <button
+            className=" py-2 px-3 rounded-full lg:absolute lg:left-0 lg:-top-20"
+            onClick={prevSlide}
+          >
             <svg
               fill="#ADA785"
               height="200px"
@@ -107,7 +146,10 @@ const Testimonials = () => {
               </g>
             </svg>
           </button>
-          <button className=" py-2 px-3 rounded-full " onClick={nextSlide}>
+          <button
+            className="right py-2 px-3 rounded-full lg:absolute lg:right-0 lg:-top-20 "
+            onClick={nextSlide}
+          >
             <svg
               fill="#ADA785"
               height="200px"
@@ -139,6 +181,90 @@ const Testimonials = () => {
             </svg>
           </button>
         </div>
+      </div>
+
+      <div className="pt-28 px-5 xl:px-8 hidden xl:flex justify-between items-center gap-12">
+        <div className=" right">
+          <div className=" flex items-center justify-start gap-5">
+            <div className=" w-14 h-14 ">
+              <img
+                src={img}
+                alt=""
+                className=" w-full h-full object-cover rounded-full"
+              />
+            </div>
+            <div className="">
+              <h1 className=" font-Roboto font-semibold text-base text-white">
+                John Smith
+              </h1>
+              <span className=" font-Roboto  text-sm text-gray-400 ">
+                CFO at The Verge
+              </span>
+            </div>
+          </div>
+          <p className="  mt-6 font-Roboto text-xs font-light text-white leading-5 text-start">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            ac ultrices odio. Nulla at congue diam, at dignissim turpis. Ut
+            vehicula sed velit a faucibus. In feugiat vestibulum velit vel
+            pulvinar.
+          </p>
+        </div>
+
+
+        <div className="bottom">
+          <div className=" flex items-center justify-start gap-5">
+            <div className=" w-14 h-14 ">
+              <img
+                src={img1}
+                alt=""
+                className=" w-full h-full object-cover rounded-full"
+              />
+            </div>
+            <div className="">
+              <h1 className=" font-Roboto font-semibold text-base text-white">
+              Mike Johns
+              </h1>
+              <span className=" font-Roboto  text-sm text-gray-400 ">
+              Sydney, Australia
+              </span>
+            </div>
+          </div>
+          <p className="  mt-6 font-Roboto text-xs font-light text-white leading-5 text-start">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            ac ultrices odio. Nulla at congue diam, at dignissim turpis. Ut
+            vehicula sed velit a faucibus. In feugiat vestibulum velit vel
+            pulvinar.
+          </p>
+        </div>
+
+
+        <div className="left">
+          <div className=" flex items-center justify-start gap-5">
+            <div className=" w-14 h-14 ">
+              <img
+                src={img2}
+                alt=""
+                className=" w-full h-full object-cover rounded-full"
+              />
+            </div>
+            <div className="">
+              <h1 className=" font-Roboto font-semibold text-base text-white">
+              Sally Wilson
+              </h1>
+              <span className=" font-Roboto  text-sm text-gray-400 ">
+              CFO at Amazon
+              </span>
+            </div>
+          </div>
+          <p className="  mt-6 font-Roboto text-xs font-light text-white leading-5 text-start">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            ac ultrices odio. Nulla at congue diam, at dignissim turpis. Ut
+            vehicula sed velit a faucibus. In feugiat vestibulum velit vel
+            pulvinar.
+          </p>
+        </div>
+
+        
       </div>
     </section>
   );
